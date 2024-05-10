@@ -1,1 +1,1 @@
-All methods related code and graphics will be recorded here. 
+BiFrost is now the backbone for kallisto's T-DBG. Thus, to generate these gfa, we used BiFrost to build a T-DBG based only on PAX2 and then only on the first 1000 transcripts in chromosome 1 as examples of the decreasing complexity of T-DBG with longer k-mer length. 
