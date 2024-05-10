@@ -1,0 +1,145 @@
+R Imports
+```{r, message=FALSE}
+Sys.setenv(RETICULATE_PYTHON = paste("/home/rstudio/.conda/envs", 'sc14_umap5', "bin/python3.9", sep = "/"))
+library(reticulate)
+library(Matrix)
+library(tidyverse)
+library(scattermore)
+library(glue)
+library(ggforce)
+library(ggplotify)
+library(grid)
+library(gtable)
+library(ggplot2)
+library(tibble)
+theme_set(theme_bw(base_family = "Arial"))
+```
+
+```{r}
+read_count_output_modified_lr <- function(dir, name, tpm = TRUE) {
+    dir <- normalizePath(dir, mustWork = TRUE)
+    m <- readMM(paste0(dir, "/", name, ".abundance.tpm.mtx"))
+    m <- Matrix::t(m)
+    m <- as(m, "dgCMatrix")
+    # The matrix read has cells in rows
+    con_genes <- file(paste0(dir, "/","transcripts.txt"))
+    con_bcs <- file(paste0(dir, "/", name, ".sample.barcodes"))
+    genes <- readLines(con_genes)
+    barcodes <- readLines(con_bcs)
+    colnames(m) <- barcodes
+    rownames(m) <- genes
+    close(con_genes)
+    close(con_bcs)
+    return(m)
+}
+
+read_quant <- function(dir, name) {
+    dir <- normalizePath(dir, mustWork = TRUE)
+    m <- read.table(file = paste0(dir, "/", name), sep = '\t', header = TRUE)
+    return(m)
+}
+```
+
+```{r}
+dir1 = '/workspace/lr-kallisto/counts_lr'
+lr_cpm <- read_count_output_modified_lr(dir1, name = "matrix")
+
+dir2 = '/workspace/lr-kallisto/counts_ill'
+ill_tpm <- read_count_output_modified_lr(dir2, name = "matrix")
+
+dir3 = '/workspace/lr-kallisto/counts_oarfish'
+quant_tpm <-  read_quant(dir3, name = "PacBio_oarfish.quant")
+
+dir4 = '/workspace/lr-kallisto/counts_isoquant'
+iq_tpm <-  read_quant(dir4, name = "OUT.transcript_counts.tsv")
+
+dir5 = '/workspace/lr-kallisto/counts_bambu'
+bam_tpm <-  read_quant(dir5, name = "CPM_transcript.txt")
+```
+
+```{r}
+# sum rows to get cpm for genes
+lr_cpm <- tibble::rownames_to_column(as.data.frame(rowSums(lr_cpm)), 'TXNAME')
+ill_tpm <- tibble::rownames_to_column(as.data.frame(rowSums(ill_tpm)), 'TXNAME')
+
+# rename columns to make merging data easier
+colnames(lr_cpm)[colnames(lr_cpm) == 'rowSums(lr_cpm)'] <- 'lr_reads'
+colnames(ill_tpm)[colnames(ill_tpm) == 'rowSums(ill_tpm)'] <- 'ill_reads'
+colnames(quant_tpm)[colnames(quant_tpm) == 'tname'] <- 'TXNAME'
+colnames(quant_tpm)[colnames(quant_tpm) == 'num_reads'] <- 'quant_reads'
+colnames(bam_tpm)[colnames(bam_tpm) == 'sorted_PacBio'] <- 'bam_reads'
+colnames(iq_tpm)[colnames(iq_tpm) == 'feature_id'] <- 'TXNAME'
+colnames(iq_tpm)[colnames(iq_tpm) == 'count'] <- 'iq_reads'
+quant_tpm <- subset(quant_tpm, select = -c(2) )
+bam_tpm <- subset(bam_tpm, select = -c(2) )
+
+# merge the data into one dataframe
+all_comps <- merge(lr_cpm, ill_tpm, by='TXNAME')
+all_comps <- merge(all_comps, quant_tpm, by='TXNAME')
+
+# isoquant and bambu use a different naming system, so change before adding those datasets
+all_comps$TXNAME <- gsub("\\..*", "", all_comps$TXNAME)
+all_comps <- merge(all_comps, bam_tpm, by='TXNAME')
+all_comps <- merge(all_comps, iq_tpm, all = TRUE)
+all_comps[is.na(all_comps)] <- 0
+```
+
+Comparisons
+```{python}
+import scipy.stats
+import numpy as np
+import matplotlib.pyplot as plt 
+import math
+
+def make_comp_graph(x_list, y_list, x_name, y_name):
+    y = np.log2([y+1 for y in y_list])
+    x = np.log2([x+1 for x in x_list])
+    pr, p = scipy.stats.pearsonr(x,y)   # Pearson's r
+    rho = scipy.stats.spearmanr(x,y).correlation   # Spearman's rho
+    tau = scipy.stats.kendalltau(x, y)[0]  # Kendall's tau
+    m, b = np.polyfit(x, y, 1)
+    print(f"Comparing {x_name} to {y_name}")
+    print(f"Pearson's r: {pr, p}")
+    print(f"Spearman's rho: {rho}")
+    print(f"Kendall's tau: {tau}")
+    y_true = y
+    y_pred = x
+    cor = np.corrcoef(y_true, y_pred)[0][1]
+    # Means
+    mean_true = np.mean(y_true)
+    mean_pred = np.mean(y_pred)
+    # Population variances
+    var_true = np.var(y_true)
+    var_pred = np.var(y_pred)
+    # Population standard deviations
+    sd_true = np.std(y_true)
+    sd_pred = np.std(y_pred)
+    # Calculate CCC
+    numerator = 2 * cor * sd_true * sd_pred
+    denominator = var_true + var_pred + (mean_true - mean_pred)**2
+    ccc = numerator / denominator
+    plt.hexbin(x, y, gridsize=100, cmap='jet', bins='log')
+    plt.plot([(i+.7) for i in range(0, 16)],[(i+.7) for i in range(0, 16)], label='y=x\nCCC '+str(round(ccc,2)))
+    plt.colorbar(label='# of transcripts/bin')
+    plt.xlabel(f"{x_name} transcript-level counts")
+    plt.ylabel(f"{y_name} transcript-level counts")
+    #plt.title("Title")
+    plt.plot(x, [m*l+b for l in x], c='r', label='Regression line\nPearson R'+str(round(pr,2))+'\nSpearman '+r"$\rho$"+' '+str(round(rho,2)))
+    plt.legend(loc='upper left')
+    plt.savefig(f'{x_name}_v_{y_name}.png')
+    plt.show()
+    plt.close()
+```
+
+```{python}
+all_comps = r.all_comps
+name_dict = {'lr_reads': 'lr-kallisto', 'ill_reads':'Illumina', 'quant_reads':'oarfish', 'bam_reads':'bambu', 'iq_reads':'isoquant'}
+for comp1 in ['lr_reads', 'ill_reads', 'quant_reads', 'bam_reads', 'iq_reads']:
+    for comp2 in  ['lr_reads', 'ill_reads', 'quant_reads', 'bam_reads', 'iq_reads']:
+        if comp1 != comp2:
+            make_comp_graph(all_comps[comp1], all_comps[comp2], name_dict[comp1], name_dict[comp2])
+```
+
+
+
+
