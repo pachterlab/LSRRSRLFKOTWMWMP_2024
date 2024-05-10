@@ -1,0 +1,7 @@
+#! /bin/bash
+
+minimap2 -t 32 -ax map-pb references/genome.fa *fastqs* > isoquant_results/PacBio.sam;
+
+samtools view -bS -@ 16 -o isoquant_results/PacBio.bam isoquant_results/PacBio.sam;
+samtools sort -@ 16 -o isoquant_results/sorted_PacBio.bam isoquant_results/PacBio.bam;
+samtools index -@ 16 isoquant_results/sorted_PacBio.bam;

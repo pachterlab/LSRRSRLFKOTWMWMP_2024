@@ -1,0 +1,7 @@
+#! /bin/bash
+
+minimap2 -t 32 -ax map-pb -N 100 mouse_lr.cdna.fa *fastqs* > oarfish_results/PacBio.sam;
+
+samtools view -bS -o oarfish_results/PacBio.bam oarfish_results/PacBio.sam;
+
+oarfish --threads 32 --model-coverage --filter-group no-filters --alignments oarfish_results/PacBio.bam --output oarfish_results/PacBio_oarfish;

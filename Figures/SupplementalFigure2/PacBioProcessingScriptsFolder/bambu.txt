@@ -1,0 +1,13 @@
+#!/usr/bin/env Rscript
+install.packages("bambu")
+library(bambu)
+bamb01 <- "isoquant_results/sorted_PacBio.bam"
+
+fa.file <- "references/genome.fa"
+
+gtf.file <- "references/annotations.gtf"
+
+bambuAnnotations <- prepareAnnotations(gtf.file)
+
+se <- bambu(reads = bamb01, annotations = bambuAnnotations, genome = fa.file, discovery = FALSE)
+writeBambuOutput(se, path = "bambu_results")
