@@ -6,130 +6,7 @@ import scipy.stats
 import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size': 12})
 
-def comparison(long, short, ref):
-        print(long, short, ref)
-        '''
-        count = mmread(long+'/lr_init_quant_tcc/matrix.abundance.tpm.mtx')
-        #print(count)
-        labels = pd.read_csv(long+'/transcripts.txt', header=None, sep='\t')
-        #print(np.shape(labels.values))
-    
-        #print(count.todense())
-        count_bus_lr = pd.DataFrame(count.todense().T, columns=['lr_bus_counts'])
-        count_bus_lr['transcript_id'] = [labels.values[i][0] for i in range(np.shape(labels.values)[0])]
-        # # Don't remove for LRGASP evaluation [labels.values[i][0].split('.')[0] for i in range(np.shape(labels.values)[0])]
-        #count_bus.index.name = 'transcript_id'
-        #count_bus_lr = count_bus_lr[count_bus_lr['lr_bus_counts'] > .01]
-        count_bus_lr.to_csv(long+'_bus_lr_init_quant_tcc.tsv', sep="\t", columns=['transcript_id','lr_bus_counts'], header=1, index=0)
-        '''
-        count = mmread(short+'/matrix.abundance.tpm.mtx')
-        #print(count)
-        labels = pd.read_csv(short+'/transcripts.txt', header=None, sep='\t')
-        #print(np.shape(labels.values))
-    
-        #print(count.todense())
-        count_bus_sr = pd.DataFrame(count.todense().T, columns=['sr_bus_counts'])
-        count_bus_sr['transcript_id'] = [labels.values[i][0] for i in range(np.shape(labels.values)[0])]
-        # # Don't remove for LRGASP evaluation [labels.values[i][0].split('.')[0] for i in range(np.shape(labels.values)[0])]
-        #count_bus.index.name = 'transcript_id'
-        count_bus_sr = count_bus_sr[count_bus_sr['sr_bus_counts'] > 0]
-        count_bus_sr.to_csv(short+'_bus_sr_quant_tcc.tsv', sep="\t", columns=['transcript_id','sr_bus_counts'], header=1, index=0)
-        
-        '''
-        count = count_bus_sr.merge(count_bus_lr, how='outer', on='transcript_id')
-        count = count.fillna(0)
-        #print(count) 
-
-        x = (count['lr_bus_counts'])
-        y = (count['sr_bus_counts'])
-        x = np.array(np.log2(x+1)).flatten()
-        y = np.array(np.log2(y+1)).flatten()
-        print("LN INIT: "+short)
-        mrd = np.abs(y - x) / y
-        print('MRD', np.median(mrd))
-        print('nrmse', np.sqrt(np.mean(np.square(x-y),axis=0)) / np.std(y, axis=0))
-        #y, x = y/np.sum(y)*1000000 + 1,x/np.sum(x)*1000000 + 1
-
-        r, p = scipy.stats.pearsonr(x,y)   # Pearson's r
-        rho = scipy.stats.spearmanr(x,y).correlation   # Spearman's rho
-        tau = scipy.stats.kendalltau(x, y)[0]  # Kendall's tau
-
-        #print(sim+'_k-'+k)
-        print("Pearson's r:\t", r)
-        print("Spearman's rho:\t", rho)
-        print("Kendall's tau:\t", tau)
-    
-    
-        count = mmread(long+'/lr_quant_tcc/matrix.abundance.tpm.mtx')
-        #print(count)
-        labels = pd.read_csv(long+'/transcripts.txt', header=None, sep='\t')
-        #print(np.shape(labels.values))
-    
-        #print(count.todense())
-        count_bus_lr = pd.DataFrame(count.todense().T, columns=['lr_bus_counts'])
-        count_bus_lr['transcript_id'] = [labels.values[i][0] for i in range(np.shape(labels.values)[0])]
-        # # Don't remove for LRGASP evaluation [labels.values[i][0].split('.')[0] for i in range(np.shape(labels.values)[0])]
-        #count_bus.index.name = 'transcript_id'
-        #count_bus_lr = count_bus_lr[count_bus_lr['lr_bus_counts'] > .01]
-        count_bus_lr.to_csv(long+'_bus_lr_quant_tcc.tsv', sep="\t", columns=['transcript_id','lr_bus_counts'], header=1, index=0)
-
-        count = count_bus_sr.merge(count_bus_lr, how='outer', on='transcript_id')
-        count = count.fillna(0)
-        #print(count) 
-
-        x = (count['lr_bus_counts'])
-        y = (count['sr_bus_counts'])
-        x = np.array(np.log2(x+1)).flatten()
-        y = np.array(np.log2(y+1)).flatten()
-        print("LN: "+short)
-        mrd = np.abs(y - x) / y
-        print('MRD', np.median(mrd))
-        print('nrmse', np.sqrt(np.mean(np.square(x-y),axis=0)) / np.std(y, axis=0))
-        #y, x = y/np.sum(y)*1000000 + 1,x/np.sum(x)*1000000 + 1
-
-        r, p = scipy.stats.pearsonr(x,y)   # Pearson's r
-        rho = scipy.stats.spearmanr(x,y).correlation   # Spearman's rho
-        tau = scipy.stats.kendalltau(x, y)[0]  # Kendall's tau
-
-        #print(sim+'_k-'+k)
-        print("Pearson's r:\t", r)
-        print("Spearman's rho:\t", rho)
-        print("Kendall's tau:\t", tau)
-        '''
-        count = mmread(long+'/matrix.abundance.tpm.mtx')
-        #print(count)
-        labels = pd.read_csv(long+'/transcripts.txt', header=None, sep='\t')
-        #print(np.shape(labels.values))
-    
-        #print(count.todense())
-        count_bus_lr = pd.DataFrame(count.todense().T, columns=['lr_bus_counts'])
-        count_bus_lr['transcript_id'] = [labels.values[i][0] for i in range(np.shape(labels.values)[0])]
-        # # Don't remove for LRGASP evaluation [labels.values[i][0].split('.')[0] for i in range(np.shape(labels.values)[0])]
-        #count_bus.index.name = 'transcript_id'
-        count_bus_lr = count_bus_lr[count_bus_lr['lr_bus_counts'] > 0]
-        count_bus_lr.to_csv(long+'_bus_lr_quant_tcc.tsv', sep="\t", columns=['transcript_id','lr_bus_counts'], header=1, index=0)
-
-        count = count_bus_sr.merge(count_bus_lr, how='outer', on='transcript_id')
-        count = count.fillna(0)
-        #print(count) 
-
-        x = (count['lr_bus_counts'])
-        y = (count['sr_bus_counts'])
-        x = np.array(np.log2(x+1)).flatten()
-        y = np.array(np.log2(y+1)).flatten()
-        print("lr-kallisto compared with short: "+short)
-        mrd = np.abs(y - x) / y
-        print('MRD', np.median(mrd))
-        print('nrmse', np.sqrt(np.mean(np.square(x-y),axis=0)) / np.std(y, axis=0))
-        #y, x = y/np.sum(y)*1000000 + 1,x/np.sum(x)*1000000 + 1
-
-        r, p = scipy.stats.pearsonr(x,y)   # Pearson's r
-        rho = scipy.stats.spearmanr(x,y).correlation   # Spearman's rho
-        tau = scipy.stats.kendalltau(x, y)[0]  # Kendall's tau
-        m, b = np.polyfit(x, y, 1)
-
-        y_true = y
-        y_pred = x
+def c_ccc(y_pred, y_true):
         cor = np.corrcoef(y_true, y_pred)[0][1]
         # Means
         mean_true = np.mean(y_true)
@@ -144,6 +21,45 @@ def comparison(long, short, ref):
         numerator = 2 * cor * sd_true * sd_pred
         denominator = var_true + var_pred + (mean_true - mean_pred)**2
         ccc = numerator / denominator
+        return ccc
+
+def comparison(long, short, ref):
+        print(long, short, ref)
+        count = mmread(short+'/matrix.abundance.tpm.mtx')
+        labels = pd.read_csv(short+'/transcripts.txt', header=None, sep='\t')
+
+        count_bus_sr = pd.DataFrame(count.todense().T, columns=['sr_bus_counts'])
+        count_bus_sr['transcript_id'] = [labels.values[i][0] for i in range(np.shape(labels.values)[0])]
+        count_bus_sr = count_bus_sr[count_bus_sr['sr_bus_counts'] > 0]
+        count_bus_sr.to_csv(short+'_bus_sr_quant_tcc.tsv', sep="\t", columns=['transcript_id','sr_bus_counts'], header=1, index=0)
+        
+        count = mmread(long+'/matrix.abundance.tpm.mtx')
+        labels = pd.read_csv(long+'/transcripts.txt', header=None, sep='\t')
+
+        count_bus_lr = pd.DataFrame(count.todense().T, columns=['lr_bus_counts'])
+        count_bus_lr['transcript_id'] = [labels.values[i][0] for i in range(np.shape(labels.values)[0])]
+
+        count_bus_lr = count_bus_lr[count_bus_lr['lr_bus_counts'] > 0]
+        count_bus_lr.to_csv(long+'_bus_lr_quant_tcc.tsv', sep="\t", columns=['transcript_id','lr_bus_counts'], header=1, index=0)
+
+        count = count_bus_sr.merge(count_bus_lr, how='outer', on='transcript_id')
+        count = count.fillna(0)
+
+        x = (count['lr_bus_counts'])
+        y = (count['sr_bus_counts'])
+        x = np.array(np.log2(x+1)).flatten()
+        y = np.array(np.log2(y+1)).flatten()
+        print("lr-kallisto compared with short: "+short)
+        mrd = np.abs(y - x) / y
+        print('MRD', np.median(mrd))
+        print('nrmse', np.sqrt(np.mean(np.square(x-y),axis=0)) / np.std(y, axis=0))
+
+        r, p = scipy.stats.pearsonr(x,y)   # Pearson's r
+        rho = scipy.stats.spearmanr(x,y).correlation   # Spearman's rho
+        tau = scipy.stats.kendalltau(x, y)[0]  # Kendall's tau
+        m, b = np.polyfit(x, y, 1)
+
+        ccc = c_ccc(x, y)
         
         print(ccc)
 
@@ -182,20 +98,6 @@ def comparison(long, short, ref):
         plt.clf()
 
 def comparison_oarfish(long, short, ref):
-        '''
-        count = mmread(long+'/lr_init_quant_tcc/matrix.abundance.tpm.mtx')
-        #print(count)
-        labels = pd.read_csv(long+'/transcripts.txt', header=None, sep='\t')
-        #print(np.shape(labels.values))
-    
-        #print(count.todense())
-        count_bus_lr = pd.DataFrame(count.todense().T, columns=['lr_bus_counts'])
-        count_bus_lr['transcript_id'] = [labels.values[i][0] for i in range(np.shape(labels.values)[0])]
-        # # Don't remove for LRGASP evaluation [labels.values[i][0].split('.')[0] for i in range(np.shape(labels.values)[0])]
-        #count_bus.index.name = 'transcript_id'
-        #count_bus_lr = count_bus_lr[count_bus_lr['lr_bus_counts'] > .01]
-        count_bus_lr.to_csv(long+'_bus_lr_init_quant_tcc.tsv', sep="\t", columns=['transcript_id','lr_bus_counts'], header=1, index=0)
-        '''
         count = mmread(short+'/matrix.abundance.tpm.mtx')
         #print(count)
         labels = pd.read_csv(short+'/transcripts.txt', header=None, sep='\t')
@@ -231,22 +133,7 @@ def comparison_oarfish(long, short, ref):
         tau = scipy.stats.kendalltau(x, y)[0]  # Kendall's tau
         m, b = np.polyfit(x, y, 1)
 
-        y_true = y
-        y_pred = x
-        cor = np.corrcoef(y_true, y_pred)[0][1]
-        # Means
-        mean_true = np.mean(y_true)
-        mean_pred = np.mean(y_pred)
-        # Population variances
-        var_true = np.var(y_true)
-        var_pred = np.var(y_pred)
-        # Population standard deviations
-        sd_true = np.std(y_true)
-        sd_pred = np.std(y_pred)
-        # Calculate CCC
-        numerator = 2 * cor * sd_true * sd_pred
-        denominator = var_true + var_pred + (mean_true - mean_pred)**2
-        ccc = numerator / denominator
+        ccc = c_ccc(x, y)
         
         print(ccc)
         #print(sim+'_k-'+k)
@@ -281,7 +168,6 @@ def comparison_bambu(long, short, ref):
 
         count_bus_sr = pd.DataFrame(count.todense().T, columns=['sr_bus_counts'])
         count_bus_sr['transcript_id'] = [labels.values[i][0] for i in range(np.shape(labels.values)[0])]
-        # # Don't remove for LRGASP evaluation [labels.values[i][0].split('.')[0] for i in range(np.shape(labels.values)[0])]
         count_bus_sr = count_bus_sr[count_bus_sr['sr_bus_counts'] > 0]
         count_bus_sr.to_csv(short+'_bus_sr_quant_tcc.tsv', sep="\t", columns=['transcript_id','sr_bus_counts'], header=1, index=0)
 
@@ -305,22 +191,7 @@ def comparison_bambu(long, short, ref):
         tau = scipy.stats.kendalltau(x, y)[0]  # Kendall's tau
         m, b = np.polyfit(x, y, 1)
 
-        y_true = y
-        y_pred = x
-        cor = np.corrcoef(y_true, y_pred)[0][1]
-        # Means
-        mean_true = np.mean(y_true)
-        mean_pred = np.mean(y_pred)
-        # Population variances
-        var_true = np.var(y_true)
-        var_pred = np.var(y_pred)
-        # Population standard deviations
-        sd_true = np.std(y_true)
-        sd_pred = np.std(y_pred)
-        # Calculate CCC
-        numerator = 2 * cor * sd_true * sd_pred
-        denominator = var_true + var_pred + (mean_true - mean_pred)**2
-        ccc = numerator / denominator
+        ccc = c_ccc(x, y)
 
         print(ccc)
         print("Pearson's r:\t", r)
@@ -351,7 +222,6 @@ def comparison_IQ(long, short, ref):
 
         count_bus_sr = pd.DataFrame(count.todense().T, columns=['sr_bus_counts'])
         count_bus_sr['transcript_id'] = [labels.values[i][0] for i in range(np.shape(labels.values)[0])]
-        # # Don't remove for LRGASP evaluation [labels.values[i][0].split('.')[0] for i in range(np.shape(labels.values)[0])]
         count_bus_sr = count_bus_sr[count_bus_sr['sr_bus_counts'] > 0]
         count_bus_sr.to_csv(short+'_bus_sr_quant_tcc.tsv', sep="\t", columns=['transcript_id','sr_bus_counts'], header=1, index=0)
 
@@ -375,22 +245,7 @@ def comparison_IQ(long, short, ref):
         tau = scipy.stats.kendalltau(x, y)[0]  # Kendall's tau
         m, b = np.polyfit(x, y, 1)
 
-        y_true = y
-        y_pred = x
-        cor = np.corrcoef(y_true, y_pred)[0][1]
-        # Means
-        mean_true = np.mean(y_true)
-        mean_pred = np.mean(y_pred)
-        # Population variances
-        var_true = np.var(y_true)
-        var_pred = np.var(y_pred)
-        # Population standard deviations
-        sd_true = np.std(y_true)
-        sd_pred = np.std(y_pred)
-        # Calculate CCC
-        numerator = 2 * cor * sd_true * sd_pred
-        denominator = var_true + var_pred + (mean_true - mean_pred)**2
-        ccc = numerator / denominator
+        ccc = c_ccc(x, y)
 
         print(ccc)
         print("Pearson's r:\t", r)
