@@ -1,0 +1,12 @@
+kb ref --kallisto kallisto/build/src/kallisto -i mouse_lr_k-63.idx -k 63 -f1 mouse_lr.cdna.fa -g mouse_lr.t2g.txt references/genome.fa references/annotations.gtf
+
+
+kallisto/build/src/kallisto bus --verbose --long --threshold .8 --error-rate .005 -x bulk -i mouse_lr_k-63.idx -o counts_lr -t 8 *fastqs*
+
+
+bustools/build/src/bustools sort -t 32 counts_lr/output.bus -o counts_lr/sorted.bus
+
+bustools/build/src/bustools count counts_lr/sorted.bus -t counts_lr/transcripts.txt -e counts_lr/matrix.ec -o counts_lr/count --cm -m -g mouse_lr.t2g.txt
+
+
+kallisto/build/src/kallisto quant-tcc -t 32 --long -P ONT counts_lr/count.mtx -i mouse_lr.idx -f counts_lr/flens.txt -e counts_lr/count.ec.txt -o demo_counts/ 
