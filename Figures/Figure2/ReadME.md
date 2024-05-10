@@ -1,0 +1,1 @@
+Comparison of lr-kallisto, IsoQuant, Bambu, and Oarfish in the metrics of CCC of expression and CCC of isoform CV2 with 90% CI to measure consistency and reproducibility among replicates between the tools.
