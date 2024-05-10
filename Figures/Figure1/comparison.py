@@ -112,6 +112,7 @@ def comparison_oarfish(long, short, ref):
         count_bus_sr.to_csv(short+'_bus_lr_init_quant_tcc.tsv', sep="\t", columns=['transcript_id','sr_bus_counts'], header=1, index=0)
         
         count = pd.read_csv(long, sep = '\t', names=['transcript_id', 'length', 'reads_count'], header=0)
+        count['reads_count'] = count['reads_count']/np.sum(count['reads_count'])*1000000
         count_bus_lr = count[count['reads_count'] > 0]
 
         count = count_bus_sr.merge(count_bus_lr, how='outer', on='transcript_id')
@@ -172,6 +173,7 @@ def comparison_bambu(long, short, ref):
         count_bus_sr.to_csv(short+'_bus_sr_quant_tcc.tsv', sep="\t", columns=['transcript_id','sr_bus_counts'], header=1, index=0)
 
         count = pd.read_csv(long+'/counts_transcript.txt', sep = '\t', names=['transcript_id', 'GENEID', 'reads_count'], header=0)
+        count['reads_count'] = count['reads_count']/np.sum(count['reads_count'])*1000000
         count_bus_lr = count#[count['reads_count'] > 0]
 
         count = count_bus_sr.merge(count_bus_lr, how='inner', on='transcript_id')
@@ -226,6 +228,7 @@ def comparison_IQ(long, short, ref):
         count_bus_sr.to_csv(short+'_bus_sr_quant_tcc.tsv', sep="\t", columns=['transcript_id','sr_bus_counts'], header=1, index=0)
 
         count = pd.read_csv(long+'/OUT/OUT.transcript_counts.tsv', sep = '\t', names=['transcript_id', 'reads_count'], header=0)
+        count['reads_count'] = count['reads_count']/np.sum(count['reads_count'])*1000000
         count_bus_lr = count#[count['reads_count'] > 0]
 
         count = count_bus_sr.merge(count_bus_lr, how='inner', on='transcript_id')
