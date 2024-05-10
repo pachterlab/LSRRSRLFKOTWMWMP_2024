@@ -1,7 +1,0 @@
-#ONT Replicate1
-../sratoolkit.3.1.0-centos_linux64/bin/fasterq-dump SRR14286057
-#Illumina Replicate1
-../sratoolkit.3.1.0-centos_linux64/bin/fasterq-dump SRR14286054
-#PacBio Replicate1 
-../sratoolkit.3.1.0-centos_linux64/bin/fasterq-dump SRR14286060
-../sratoolkit.3.1.0-centos_linux64/bin/fasterq-dump SRR25180679
