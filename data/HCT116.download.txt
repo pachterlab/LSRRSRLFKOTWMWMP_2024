@@ -1,0 +1,4 @@
+wget http://sg-nex-data.s3.amazonaws.com/data/sequencing_data_ont/fastq/SGNex_Hct116_directcDNA_replicate3_run2/SGNex_Hct116_directcDNA_replicate3_run2.fastq.gz
+wget http://sg-nex-data.s3.amazonaws.com/data/sequencing_data_ont/fastq/SGNex_Hct116_directcDNA_replicate4_run1/SGNex_Hct116_directcDNA_replicate4_run1.fastq.gz
+wget http://sg-nex-data.s3.amazonaws.com/data/sequencing_data_ont/fastq/SGNex_Hct116_directRNA_replicate3_run4/SGNex_Hct116_directRNA_replicate3_run4.fastq.gz
+wget http://sg-nex-data.s3.amazonaws.com/data/sequencing_data_ont/fastq/SGNex_Hct116_directRNA_replicate4_run3/SGNex_Hct116_directRNA_replicate4_run3.fastq.gz
