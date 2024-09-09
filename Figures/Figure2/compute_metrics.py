@@ -6,6 +6,7 @@ def compute_ccc(file, rep1, rep2):
 	abundance = pd.read_csv(file, sep='\t')
 	y_true = abundance.iloc[:,rep1]
 	y_pred = abundance.iloc[:,rep2]
+	y_true, y_pred = y_true/np.sum(y_true)*1000000,y_pred/np.sum(y_pred)*1000000
 	ccc = c_ccc(y_true, y_pred)
 	return ccc
 
@@ -38,9 +39,12 @@ def compute_mean_ccc_COV2(file, rep1, rep2, rep3):
 		gene_id = pd.read_csv('bambu_IQ_quants/human_WTC11_ONT_CapTrap_bambu/counts_transcript.txt', sep='\t') 
 	abundance = abundance.merge(gene_id[['TXNAME','GENEID']],how='inner', left_on=abundance.columns[0], right_on=gene_id.columns[0])
 	abundance = abundance.drop(columns=['TXNAME', abundance_col0], axis=1)
+	cols = [abundance.columns[rep1-1], abundance.columns[rep2-1], abundance.columns[rep3-1]]
+	abundance[cols] = 1000000*abundance[cols] / abundance[cols].sum()
 	std = abundance.groupby(['GENEID']).std()
 	mean = abundance.groupby(['GENEID']).mean()
 	std = std.fillna(0)
+	#mean = mean.fillna(1)
 	mean[mean == 0] = 1
 	cov = pd.DataFrame(mean)
 	cov['1'] = std.iloc[:,[rep1-1]].values/mean.iloc[:,[rep1-1]].values
@@ -49,20 +53,26 @@ def compute_mean_ccc_COV2(file, rep1, rep2, rep3):
 	cov.dropna()
 	cov = cov.loc[~(cov==0).all(axis=1)]
 	ccc1 = c_ccc(np.square(cov['1']), np.square(cov['2']))
+	#print('CCC(1, 2) = ', ccc1)
 	ccc2 = c_ccc(np.square(cov['2']), np.square(cov['3']))
+	#print('CCC(2, 3) = ', ccc2)
 	ccc3 = c_ccc(np.square(cov['1']), np.square(cov['3']))
+	#print('CCC(1, 3) = ', ccc3)
 	reps = [ccc1, ccc2, ccc3]
 	interval = st.t.interval(confidence=0.90, df=len(reps)-1,
               loc=np.mean(reps),
               scale=st.sem(reps))
 	return str(round(np.mean(reps), 4))+'\t'+str((interval[1]-interval[0])/2.)
-  
+	#return 0
 begin='human_WTC11'
 end='_end_abundance_filtered_reduced.tsv'
 rep1 = compute_ccc('cDNA_PacBio'+end, 1, 2)
+#print('CCC(1, 2) = ', rep1)
 rep2 = compute_ccc('cDNA_PacBio'+end, 2, 3)
+#print('CCC(2, 3) = ', rep2)
 rep3 = compute_ccc('cDNA_PacBio'+end, 1, 3)
-print('tool\tsample\tProtocol_Platform\tmeanCCC')
+#print('CCC(1, 3) = ', rep3)
+print('tool\tsample\tProtocol_Platform\tmeanCCC\tmeanCCC_error')
 reps = [rep1, rep2, rep3]
 interval = st.t.interval(confidence=0.90, df=len(reps)-1, 
               loc=np.mean(reps), 

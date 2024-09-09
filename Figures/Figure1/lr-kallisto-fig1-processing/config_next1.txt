@@ -1,0 +1,6 @@
+@extract <13G_next1_R2{*}>,1:0<13G_next1_umi[10]>
+tags         distances  ids     groups    minFindsG  locations
+r1_R.txt$    1          r1_R    round1    1          1,78,86
+r1_T.txt$    1          r1_T    round1    1          1,78,86
+r2_3.txt$   1          r2      round2_3  2          1,48,56
+r2_3.txt$   1          r3      round2_3  2          1,10,18

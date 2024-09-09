@@ -1,0 +1,13 @@
+@extract <13Grr_umi[10]>8{linker2},<13Grr_bc[8]>{linker2},{linker2}<13Grr_bc[8]>{linker1},{linker1}<13Grr_bc[8]>,{linker1}8<13Grr_read>0:-1
+@extract <~13Gr_umi[10]>8{linker2rc},<~13Gr_bc[8]>{linker2rc},{linker2rc}<~13Gr_bc[8]>{linker1rc},{linker1rc}<~13Gr_bc[8]>,{linker1rc}8<~13Gr_read>0:-1
+@extract <13Gf_bc[8]>{linker1},{linker1}<13Gf_bc[8]>{linker2},{linker2}<13Gf_bc[8]>,{linker2}8<13Gf_umi[10]>,0:0<13Gf_read>14{linker1}
+@extract <~13Gfrc_bc[8]>{linker1rc},{linker1rc}<~13Gfrc_bc[8]>{linker2rc},{linker2rc}<~13Gfrc_bc[8]>,{linker2rc}8<~13Gfrc_umi[10]>,0:0<~13Gfrc_read>14{linker1rc}
+groups	ids	tags	distances	locations
+group1	linker1rc	CCACAGTCTCAAGCACGTGGAT	3:3:3	0:0:0
+group1	linker1	ATCCACGTGCTTGAGACTGTGG	3:3:3	0:0:0
+group1	linker1rcr	TAGGTGCACGAACTCTGACACC	3:3:3	0:0:0
+group1	linker1r	GGTGTCAGAGTTCGTGCACCTA	3:3:3	0:0:0
+group2	linker2rc	AGTCGTACGCCGATGCGAAACATCGGCCAC	3:3:3	0:0:0
+group2	linker2	GTGGCCGATGTTTCGCATCGGCGTACGACT	3:3:3	0:0:0
+group2	linker2rcr	CACCGGCTACAAAGCGTAGCCGCATGCTGA	3:3:3	0:0:0
+group2	linker2r	TCAGCATGCGGCTACGCTTTGTAGCCGGTG	3:3:3	0:0:0

@@ -1,0 +1,6 @@
+@extract <13G_bc_rt{*}>
+tags         distances  ids     groups    minFindsG  locations
+barcode-1_onlist_v2-R.txt$    1:1:1          r1_R    round1    1          1,0,8
+barcode-1_onlist_v2-T.txt$    1:1:1          r1_T    round1    1          1,0,8
+barcode-23_onlist.txt$   1:1:1          r2      round2_3  2          1,8,16
+barcode-23_onlist.txt$   1:1:1          r3      round2_3  2          1,16,24

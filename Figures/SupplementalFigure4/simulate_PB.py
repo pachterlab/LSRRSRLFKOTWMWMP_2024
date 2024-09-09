@@ -49,6 +49,7 @@ def readfq(fp): # this is a generator function
 
 def simulate_read(i, transcript_acc, isoform ):
     #error_lvls = [0.8, 0.9, 0.92, 0.94, 0.96,0.98, 0.99, 0.995]
+    ###MODIFY THIS VALUE TO CHANGE ERROR LEVEL OF READS
     error_lvls = [0.98]
     read = []
     qual = []
