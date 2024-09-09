@@ -6,6 +6,23 @@ import scipy.stats
 import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size': 12})
 
+def c_ccc(y_pred,y_true):
+    cor = np.corrcoef(y_true, y_pred)[0][1]
+    # Means
+    mean_true = np.mean(y_true)
+    mean_pred = np.mean(y_pred)
+    # Population variances
+    var_true = np.var(y_true)
+    var_pred = np.var(y_pred)
+    # Population standard deviations
+    sd_true = np.std(y_true)
+    sd_pred = np.std(y_pred)
+    # Calculate CCC
+    numerator = 2 * cor * sd_true * sd_pred
+    denominator = var_true + var_pred + (mean_true - mean_pred)**2
+    ccc = numerator / denominator
+    return ccc
+
 def comparison(long, short, ref):
         print(long, short, ref)
         count = mmread(short+'/matrix.abundance.mtx')
@@ -42,20 +59,7 @@ def comparison(long, short, ref):
 
         y_true = y
         y_pred = x
-        cor = np.corrcoef(y_true, y_pred)[0][1]
-        # Means
-        mean_true = np.mean(y_true)
-        mean_pred = np.mean(y_pred)
-        # Population variances
-        var_true = np.var(y_true)
-        var_pred = np.var(y_pred)
-        # Population standard deviations
-        sd_true = np.std(y_true)
-        sd_pred = np.std(y_pred)
-        # Calculate CCC
-        numerator = 2 * cor * sd_true * sd_pred
-        denominator = var_true + var_pred + (mean_true - mean_pred)**2
-        ccc = numerator / denominator
+        ccc = c_ccc(y_pred,y_true)
         
         print(ccc)
         print("Pearson's r:\t", r)
@@ -124,20 +128,7 @@ def comparison_oarfish(long, short, ref):
 
         y_true = y
         y_pred = x
-        cor = np.corrcoef(y_true, y_pred)[0][1]
-        # Means
-        mean_true = np.mean(y_true)
-        mean_pred = np.mean(y_pred)
-        # Population variances
-        var_true = np.var(y_true)
-        var_pred = np.var(y_pred)
-        # Population standard deviations
-        sd_true = np.std(y_true)
-        sd_pred = np.std(y_pred)
-        # Calculate CCC
-        numerator = 2 * cor * sd_true * sd_pred
-        denominator = var_true + var_pred + (mean_true - mean_pred)**2
-        ccc = numerator / denominator
+        ccc = c_ccc(y_pred,y_true)
         
         print(ccc)
         #print(sim+'_k-'+k)
@@ -197,20 +188,7 @@ def comparison_bambu(long, short, ref):
 
         y_true = y
         y_pred = x
-        cor = np.corrcoef(y_true, y_pred)[0][1]
-        # Means
-        mean_true = np.mean(y_true)
-        mean_pred = np.mean(y_pred)
-        # Population variances
-        var_true = np.var(y_true)
-        var_pred = np.var(y_pred)
-        # Population standard deviations
-        sd_true = np.std(y_true)
-        sd_pred = np.std(y_pred)
-        # Calculate CCC
-        numerator = 2 * cor * sd_true * sd_pred
-        denominator = var_true + var_pred + (mean_true - mean_pred)**2
-        ccc = numerator / denominator
+        ccc = c_ccc(y_pred,y_true)
 
         print(ccc)
         print("Pearson's r:\t", r)
@@ -267,20 +245,7 @@ def comparison_IQ(long, short, ref):
 
         y_true = y
         y_pred = x
-        cor = np.corrcoef(y_true, y_pred)[0][1]
-        # Means
-        mean_true = np.mean(y_true)
-        mean_pred = np.mean(y_pred)
-        # Population variances
-        var_true = np.var(y_true)
-        var_pred = np.var(y_pred)
-        # Population standard deviations
-        sd_true = np.std(y_true)
-        sd_pred = np.std(y_pred)
-        # Calculate CCC
-        numerator = 2 * cor * sd_true * sd_pred
-        denominator = var_true + var_pred + (mean_true - mean_pred)**2
-        ccc = numerator / denominator
+        ccc = c_ccc(y_pred,y_true)
 
         print(ccc)
         print("Pearson's r:\t", r)
