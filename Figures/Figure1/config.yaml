@@ -1,0 +1,20 @@
+13G_nanopore:
+  - /home/rloving/igvfb01_13G-gc_lig-ss_11.fastq.gz             # md5: 7425dfe4ef2e843d7ea29d648f72a2cd
+13H_nanopore:
+  - /home/rloving/igvfb01_13H_lig-ss.fastq.gz                   # md5: fa164a6e35c56ab84d9c004131905ac9
+
+13G_next1:
+  R1:
+    - /home/8cube/raw_data/igvf_b01/next1/B01_13G_R1.fastq.gz   # md5:d77e8a68d9e8f50554567b230a889797
+  R2:
+    - /home/8cube/raw_data/igvf_b01/next1/B01_13G_R2.fastq.gz   # md5:7ca68a42f97db8743144990ca3f84aa4
+
+13H_next1:
+  R1:
+    - /home/8cube/raw_data/igvf_b01/next1/B01_13H_R1.fastq.gz   # md5:00bcecc5012670839b1b1bf9dc79757e
+  R2:
+    - /home/8cube/raw_data/igvf_b01/next1/B01_13H_R2.fastq.gz   # md5:e55fcbfb1403a445741f0982d6d0075c
+
+parse_r1_R_barcodes: "/home/rloving/r1_R.txt"
+parse_r1_T_barcodes: "/home/rloving/r1_T.txt"
+parse_r2_3_barcodes: "/home/rloving/r2_3.txt"
