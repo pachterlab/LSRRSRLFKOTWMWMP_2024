@@ -1,0 +1,5 @@
+name: seqspec
+dependencies:
+  - pip
+  - pip:
+      - git+https://github.com/pachterlab/seqspec@v0.3.1

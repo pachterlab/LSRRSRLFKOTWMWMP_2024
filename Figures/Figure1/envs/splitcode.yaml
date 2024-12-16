@@ -1,0 +1,5 @@
+name: splitclode
+channels:
+  - bioconda
+dependencies:
+  - splitcode==0.30.0

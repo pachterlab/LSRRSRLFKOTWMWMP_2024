@@ -1,0 +1,6 @@
+name: kb_python
+dependencies:
+  - python<3.13
+  - pip
+  - pip:
+      - kb_python==0.29.1
